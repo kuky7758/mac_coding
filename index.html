@@ -159,6 +159,41 @@
         return false;
       }
     }
+
+    const postListEl = document.getElementById('postList');
+
+    function formatTime(timestamp) {
+      const d = new Date(timestamp);
+      const pad = n => String(n).padStart(2, '0');
+      return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    }
+
+    function renderPosts(posts) {
+      postListEl.innerHTML = '';
+
+      if (posts.length === 0) {
+        postListEl.innerHTML = '<div class="empty-state">还没有内容，写下一句话吧</div>';
+        return;
+      }
+
+      const sorted = [...posts].sort((a, b) => b.timestamp - a.timestamp);
+
+      for (const post of sorted) {
+        const card = document.createElement('div');
+        card.className = 'post-card';
+        card.innerHTML = `
+          <div class="post-content">${escapeHtml(post.content)}</div>
+          <div class="post-time">${formatTime(post.timestamp)}</div>
+        `;
+        postListEl.appendChild(card);
+      }
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
   </script>
 </body>
 </html>
