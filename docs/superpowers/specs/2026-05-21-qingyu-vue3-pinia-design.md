@@ -163,12 +163,33 @@ mac_coding/
 - `build`: `vite build`
 - `test`: `vitest`
 
+## 样式设计系统
+
+基于用户要求的浅绿色清新主题，具体色值：
+
+| 用途 | 色值 |
+|---|---|
+| 页面背景 | `linear-gradient(135deg, #f0f7f0 0%, #e8f5e9 100%)` |
+| 主标题 | `#2e7d32`（深绿） |
+| 副标题/时间 | `#66bb6a` / `#81c784`（中绿） |
+| 按钮背景 | `#4caf50`（标准绿） |
+| 按钮悬浮 | `#43a047`（深一点） |
+| 按钮圆角 | `20px`（胶囊形） |
+| 卡片左边框 | `#4caf50`（输入框）/ `#a5d6a7`（帖子） |
+| 空状态 | `#a5d6a7`（浅绿）+ 斜体 |
+| 字数超限 | `#f44336`（保持红色警示） |
+
+**交互细节：**
+- 按钮悬浮：`translateY(-1px)` + 阴影加深
+- 卡片悬浮：`translateY(-2px)` + 阴影加深
+- textarea focus：`border-color: #4caf50` + 绿色光晕 `box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15)`
+
 ## 样式迁移策略
 
 原 `index.html` 中的内嵌 CSS 按职责拆分：
-- 全局基础样式（body、container）→ `src/style.css`
-- 组件特有样式（input-card、post-card 等）→ 各自组件的 `<style scoped>`
-- 保持原视觉风格不变
+- 全局基础样式（body 渐变、container）→ `src/style.css`
+- 组件特有样式（input-card、post-card、按钮等）→ 各自组件的 `<style scoped>`
+- 复用上述浅绿色设计系统
 
 ## 验收标准
 
