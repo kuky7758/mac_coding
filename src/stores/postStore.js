@@ -1,7 +1,13 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-
-const STORAGE_KEY = 'qingyu_posts'
+import {
+  getPosts,
+  createPost,
+  likePost,
+  unlikePost,
+  favoritePost,
+  unfavoritePost,
+} from '../api/client.js'
 
 export const usePostStore = defineStore('post', () => {
   const posts = ref([])
@@ -12,46 +18,65 @@ export const usePostStore = defineStore('post', () => {
 
   const isEmpty = computed(() => posts.value.length === 0)
 
-  function loadFromStorage() {
+  async function loadPosts() {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY)
-      posts.value = raw ? JSON.parse(raw) : []
+      const data = await getPosts()
+      posts.value = Array.isArray(data) ? data : []
     } catch (e) {
-      console.error('读取数据失败', e)
+      console.error('加载帖子失败', e)
       posts.value = []
     }
   }
 
-  function saveToStorage() {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(posts.value))
-      return true
-    } catch (e) {
-      if (e.name === 'QuotaExceededError') {
-        alert('存储空间不足，请清理后重试')
-      } else {
-        alert('保存失败，请重试')
-      }
-      return false
-    }
-  }
-
-  function publishPost(content) {
+  async function publishPost(content) {
     const trimmed = content.trim()
     if (!trimmed) return false
 
-    const now = Date.now()
-    const newPost = { id: now, content: trimmed, timestamp: now }
-    posts.value.push(newPost)
-
-    if (!saveToStorage()) {
-      posts.value.pop()
+    try {
+      const newPost = await createPost(trimmed)
+      posts.value.unshift(newPost)
+      return true
+    } catch (e) {
+      console.error('发布失败', e)
       return false
     }
-    return true
   }
 
-  loadFromStorage()
+  async function toggleLike(id) {
+    const post = posts.value.find((p) => p.id === id)
+    if (!post) return
+    try {
+      const result = post.hasLiked ? await unlikePost(id) : await likePost(id)
+      post.likeCount = result.likeCount
+      post.hasLiked = result.hasLiked
+    } catch (e) {
+      console.error('点赞操作失败', e)
+    }
+  }
 
-  return { posts, sortedPosts, isEmpty, loadFromStorage, publishPost }
+  async function toggleFavorite(id) {
+    const post = posts.value.find((p) => p.id === id)
+    if (!post) return
+    try {
+      const result = post.hasFavorited
+        ? await unfavoritePost(id)
+        : await favoritePost(id)
+      post.favoriteCount = result.favoriteCount
+      post.hasFavorited = result.hasFavorited
+    } catch (e) {
+      console.error('收藏操作失败', e)
+    }
+  }
+
+  loadPosts()
+
+  return {
+    posts,
+    sortedPosts,
+    isEmpty,
+    loadPosts,
+    publishPost,
+    toggleLike,
+    toggleFavorite,
+  }
 })

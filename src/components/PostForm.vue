@@ -36,7 +36,7 @@ async function handlePublish() {
 
   isPublishing.value = true
   try {
-    const success = store.publishPost(content)
+    const success = await store.publishPost(content)
     if (success) {
       inputContent.value = ''
     }

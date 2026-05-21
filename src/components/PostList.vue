@@ -10,6 +10,22 @@
     >
       <div class="post-content">{{ post.content }}</div>
       <div class="post-time">{{ formatTime(post.timestamp) }}</div>
+      <div class="post-actions">
+        <button
+          class="action-btn like-btn"
+          :style="{ color: post.hasLiked ? '#4caf50' : '#999' }"
+          @click="store.toggleLike(post.id)"
+        >
+          ❤️ {{ post.likeCount }}
+        </button>
+        <button
+          class="action-btn favorite-btn"
+          :style="{ color: post.hasFavorited ? '#4caf50' : '#999' }"
+          @click="store.toggleFavorite(post.id)"
+        >
+          ⭐ {{ post.favoriteCount }}
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -57,6 +73,25 @@ function formatTime(timestamp) {
   font-size: 12px;
   color: #81c784;
   margin-top: 8px;
+}
+
+.post-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.action-btn {
+  background: none;
+  border: none;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: color 0.2s;
 }
 
 .empty-state {
