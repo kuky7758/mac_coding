@@ -134,7 +134,31 @@
   </div>
 
   <script>
-    // JavaScript 将在后续任务中填充
+    const STORAGE_KEY = 'qingyu_posts';
+
+    function loadPosts() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) {
+        console.error('读取数据失败', e);
+        return [];
+      }
+    }
+
+    function savePosts(posts) {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
+        return true;
+      } catch (e) {
+        if (e.name === 'QuotaExceededError') {
+          alert('存储空间不足，请清理后重试');
+        } else {
+          alert('保存失败，请重试');
+        }
+        return false;
+      }
+    }
   </script>
 </body>
 </html>
