@@ -229,17 +229,23 @@
       }
 
       isPublishing = true;
-      const posts = loadPosts();
-      const now = Date.now();
-      const newPost = { id: now, content, timestamp: now };
-      const newPosts = [...posts, newPost];
+      publishBtn.disabled = true;
 
-      if (savePosts(newPosts)) {
-        renderPosts(newPosts);
-        contentInput.value = '';
-        updateCharCount();
+      try {
+        const posts = loadPosts();
+        const now = Date.now();
+        const newPost = { id: now, content, timestamp: now };
+        const newPosts = [...posts, newPost];
+
+        if (savePosts(newPosts)) {
+          renderPosts(newPosts);
+          contentInput.value = '';
+          updateCharCount();
+        }
+      } finally {
+        isPublishing = false;
+        publishBtn.disabled = false;
       }
-      isPublishing = false;
     }
 
     contentInput.addEventListener('input', updateCharCount);
