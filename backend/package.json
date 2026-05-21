@@ -1,0 +1,17 @@
+{
+  "name": "qingyu-backend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node src/index.js",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "hono": "^4.4.0",
+    "@hono/node-server": "^1.11.0"
+  },
+  "devDependencies": {
+    "vitest": "^1.0.0"
+  }
+}
