@@ -1,2 +1,5 @@
 .superpowers/
 .agents/
+.claude/
+screenshot_*.png
+skills-lock.json
