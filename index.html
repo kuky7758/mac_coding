@@ -165,34 +165,45 @@
     function formatTime(timestamp) {
       const d = new Date(timestamp);
       const pad = n => String(n).padStart(2, '0');
-      return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+      return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+    }
+
+    function escapeHtml(text) {
+      const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      };
+      return String(text).replace(/[&<>"']/g, ch => map[ch]);
     }
 
     function renderPosts(posts) {
-      postListEl.innerHTML = '';
-
       if (posts.length === 0) {
         postListEl.innerHTML = '<div class="empty-state">还没有内容，写下一句话吧</div>';
         return;
       }
 
+      postListEl.innerHTML = '';
       const sorted = [...posts].sort((a, b) => b.timestamp - a.timestamp);
 
       for (const post of sorted) {
         const card = document.createElement('div');
         card.className = 'post-card';
-        card.innerHTML = `
-          <div class="post-content">${escapeHtml(post.content)}</div>
-          <div class="post-time">${formatTime(post.timestamp)}</div>
-        `;
+
+        const contentEl = document.createElement('div');
+        contentEl.className = 'post-content';
+        contentEl.textContent = post.content ?? '';
+
+        const timeEl = document.createElement('div');
+        timeEl.className = 'post-time';
+        timeEl.textContent = formatTime(post.timestamp);
+
+        card.appendChild(contentEl);
+        card.appendChild(timeEl);
         postListEl.appendChild(card);
       }
-    }
-
-    function escapeHtml(text) {
-      const div = document.createElement('div');
-      div.textContent = text;
-      return div.innerHTML;
     }
   </script>
 </body>
