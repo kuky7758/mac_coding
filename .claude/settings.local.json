@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(\"C:/Users/kuky/.claude/skills/brainstorming/scripts/start-server.sh\" --project-dir \"e:/J----CMCCCDOE/AIcoding/mac_coding\")"
+    ]
+  }
+}
