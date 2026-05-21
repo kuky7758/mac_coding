@@ -1,5 +1,4 @@
 import { Hono } from 'hono'
-import { Hono } from 'hono'
 import { favoritePost, unfavoritePost, getFavoriteCount, hasFavorited } from '../store/memoryStore.js'
 
 const router = new Hono()
