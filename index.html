@@ -205,6 +205,48 @@
         postListEl.appendChild(card);
       }
     }
+
+    const contentInput = document.getElementById('contentInput');
+    const publishBtn = document.getElementById('publishBtn');
+    const charCountEl = document.getElementById('charCount');
+
+    function updateCharCount() {
+      const len = contentInput.value.length;
+      charCountEl.textContent = `${len}/280`;
+      charCountEl.classList.toggle('over-limit', len > 280);
+    }
+
+    let isPublishing = false;
+
+    function handlePublish() {
+      if (isPublishing) return;
+
+      const content = contentInput.value.trim();
+      if (!content) {
+        publishBtn.style.transform = 'scale(0.95)';
+        setTimeout(() => publishBtn.style.transform = '', 150);
+        return;
+      }
+
+      isPublishing = true;
+      const posts = loadPosts();
+      const now = Date.now();
+      const newPost = { id: now, content, timestamp: now };
+      const newPosts = [...posts, newPost];
+
+      if (savePosts(newPosts)) {
+        renderPosts(newPosts);
+        contentInput.value = '';
+        updateCharCount();
+      }
+      isPublishing = false;
+    }
+
+    contentInput.addEventListener('input', updateCharCount);
+    publishBtn.addEventListener('click', handlePublish);
+
+    // 页面初始化
+    renderPosts(loadPosts());
   </script>
 </body>
 </html>
