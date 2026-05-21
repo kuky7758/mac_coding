@@ -40,6 +40,7 @@
     textarea {
       width: 100%;
       min-height: 80px;
+      max-height: 300px;
       border: 1px solid #e0e0e0;
       border-radius: 8px;
       padding: 12px;
@@ -120,7 +121,7 @@
     </div>
 
     <div class="input-card">
-      <textarea id="contentInput" placeholder="分享新鲜事..."></textarea>
+      <textarea id="contentInput" placeholder="分享新鲜事..." aria-label="分享内容"></textarea>
       <div class="input-footer">
         <span class="char-count" id="charCount">0/280</span>
         <button id="publishBtn">发布</button>
